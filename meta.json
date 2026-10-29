@@ -1,0 +1,11 @@
+{
+  "name": "Dependency vulnerabilities",
+  "summary": "Reads an OWASP dependency-check XML report and gates on critical/high findings.",
+  "author": "hummerstudio",
+  "license": "MIT",
+  "tags": [
+    "official-port",
+    "dependency-check-report"
+  ],
+  "homepage": "https://github.com/hummerstudio/jenkins-atom-dependency-check-report"
+}
