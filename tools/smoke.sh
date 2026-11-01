@@ -57,4 +57,15 @@ printf '{}' >"$dir/input.json"
 run "$dir" >/dev/null 2>&1 && fail "an empty report must fail"
 grep -q "lists no dependency" "$dir/output.json" || fail "message not readable"
 
-echo "smoke ok: severity counts, default gate, raised limits, empty report"
+# a truncated report must not read as a clean scan
+dir="$(mktemp -d)"
+printf '<?xml version="1.0"?><analysis xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.2.0.xsd"><dependencies><dependency><vulnerabilities><vulnerability><severity>HIGH</severity></vulnerability></vulnerabilities></dependency></dependencies></analysis>' >"$dir/good.xml"
+printf '<?xml version="1.0"?><analysis xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.2.0.xsd"><dependencies><dependency>' >"$dir/half.xml"
+printf '{"pattern": "*.xml", "maxHigh": "5"}' >"$dir/input.json"
+if run "$dir" >/dev/null 2>&1; then fail "a truncated dependency-check report must fail the step"; fi
+grep -q '"errorCode":40003' "$dir/output.json" || fail "expected errorCode 40003: $(cat "$dir/output.json")"
+grep -q 'half.xml' "$dir/output.json" || fail "the failure must name the file: $(cat "$dir/output.json")"
+printf '{"pattern": "*.xml", "maxHigh": "5", "allowUnreadableReports": "true"}' >"$dir/input.json"
+run "$dir" >/dev/null 2>&1 || fail "allowUnreadableReports should let it through: $(cat "$dir/output.json")"
+
+echo "smoke ok: severity counts, default gate, raised limits, empty report, truncated report fails by default"

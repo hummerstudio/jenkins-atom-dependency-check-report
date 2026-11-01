@@ -45,10 +45,24 @@ public class DependencyCheckAtom implements AtomTask {
 
         List<Finding> findings = new ArrayList<>();
         int dependencies = 0;
+        List<String> unreadable = new ArrayList<>();
         for (Path file : files) {
-            Parsed parsed = parse(file);
+            Parsed parsed;
+            try {
+                parsed = parse(file);
+            } catch (RuntimeException e) {
+                // a half-written dependency-check-report.xml used to count as "no vulnerabilities"
+                unreadable.add(file.getFileName() + ": " + e.getMessage());
+                continue;
+            }
             findings.addAll(parsed.findings);
             dependencies += parsed.dependencies;
+        }
+        boolean allowUnreadable = context.getBooleanParam("allowUnreadableReports", false);
+        if (!unreadable.isEmpty() && !allowUnreadable) {
+            return AtomResult.error(ErrorType.USER, 40003,
+                    unreadable.size() + " of " + files.size() + " report(s) could not be parsed: "
+                            + unreadable.get(0) + " (set allowUnreadableReports=true to accept this)");
         }
         if (dependencies == 0) {
             return AtomResult.error(ErrorType.USER, 40002, "the report lists no dependency; is it complete?");
@@ -125,8 +139,8 @@ public class DependencyCheckAtom implements AtomTask {
             if (root != null && dependencies == 0) {
                 dependencies = document.getElementsByTagName("file").getLength();
             }
-        } catch (Exception ignored) {
-            // an unreadable report is not a failed gate; it is simply not counted
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), e);
         }
         return new Parsed(findings, dependencies);
     }

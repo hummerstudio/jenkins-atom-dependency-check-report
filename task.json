@@ -1,7 +1,7 @@
 {
   "atomCode": "dependency-check-report",
   "name": "Dependency vulnerabilities",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Reads an OWASP dependency-check XML report and gates on critical/high findings.",
   "execution": {
     "packagePath": "dependency-check-report.jar",
@@ -38,6 +38,11 @@
       "label": "允许的漏洞总数（-1 = 不检查）",
       "type": "vuex-input-number",
       "default": "-1"
+    },
+    "allowUnreadableReports": {
+      "label": "报告解析失败也继续（默认 false：解析失败即失败）",
+      "type": "boolean",
+      "default": "false"
     }
   },
   "output": {
