@@ -1,12 +1,12 @@
 {
-  "atomCode": "dependency-check-report",
+  "atomCode": "dependency-check",
   "name": "Dependency vulnerabilities",
   "version": "1.1.0",
   "description": "Reads an OWASP dependency-check XML report and gates on critical/high findings.",
   "execution": {
-    "packagePath": "dependency-check-report.jar",
+    "packagePath": "dependency-check.jar",
     "language": "java",
-    "target": "$atom_java_path -cp dependency-check-report.jar com.jenkinschina.atom.sdk.AtomRunner"
+    "target": "$atom_java_path -cp dependency-check.jar com.jenkinschina.atom.sdk.AtomRunner"
   },
   "input": {
     "pattern": {

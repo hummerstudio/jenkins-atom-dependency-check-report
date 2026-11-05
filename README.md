@@ -1,4 +1,4 @@
-# jenkins-atom-dependency-check-report
+# jenkins-atom-dependency-check
 
 Dependency vulnerabilities — port of **dependency-check** (约 12,000) as an atom.
 

@@ -35,9 +35,9 @@ mkdir -p "$classes/META-INF/services"
 cp src/main/resources/META-INF/services/* "$classes/META-INF/services/"
 ( cd "$sdk" && "$JAR" xf "$SDK_JAR" && rm -rf META-INF/MANIFEST.MF META-INF/services )
 
-rm -rf dist/dependency-check-report
-mkdir -p dist/dependency-check-report
-"$JAR" --create --file dist/dependency-check-report/dependency-check-report.jar -C "$classes" . -C "$sdk" .
-cp task.json dist/dependency-check-report/
-[ -f meta.json ] && cp meta.json dist/dependency-check-report/
-echo "built dist/dependency-check-report: $(ls dist/dependency-check-report | tr '\n' ' ')"
+rm -rf dist/dependency-check
+mkdir -p dist/dependency-check
+"$JAR" --create --file dist/dependency-check/dependency-check.jar -C "$classes" . -C "$sdk" .
+cp task.json dist/dependency-check/
+[ -f meta.json ] && cp meta.json dist/dependency-check/
+echo "built dist/dependency-check: $(ls dist/dependency-check | tr '\n' ' ')"
