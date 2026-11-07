@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: dependency-check-atom
-          path: atom/dist/dependency-check/
+          path: atom/target/dist/dependency-check/
